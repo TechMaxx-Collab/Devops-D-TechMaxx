@@ -2,27 +2,27 @@
 set -e
 
 # --- CONFIGURATION ---
-IMAGE_REPO="ghcr.io/YOUR_USERNAME/YOUR_REPO_NAME"
-CONTAINER_NAME="my-gitops-app" # Running container ka naam
+# Correct path with Owner/Repo
+IMAGE_REPO="ghcr.io/techmaxx-collab/devops-d-techmaxx"
+CONTAINER_NAME="my-gitops-app" 
 # --- END CONFIGURATION ---
 
 echo "--- 1. Fetching Latest 'Desired State' from Git ---"
+# 🔴 NOTE: Yeh pull bhi fail hoga agar permission nahi hai
 git pull
 
 echo "--- 2. Reading Deployment Config ---"
-# deploy.config file se version load karega
 if [ ! -f deploy.config ]; then
     echo "ERROR: deploy.config not found!"
     exit 1
 fi
-source deploy.config # Yeh 'IMAGE_TAG' variable ko script mein load karega
+source deploy.config 
 echo "Desired version (from Git) is: $IMAGE_TAG"
 
 echo "--- 3. Pulling Correct Image from GHCR ---"
 docker pull $IMAGE_REPO:$IMAGE_TAG
 
 echo "--- 4. Reconciling Environment (Stopping old container) ---"
-# '|| true' taaki agar container na bhi ho toh error na aaye
 docker stop $CONTAINER_NAME || true
 docker rm $CONTAINER_NAME || true
 
