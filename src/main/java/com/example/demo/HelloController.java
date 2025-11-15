@@ -9,6 +9,6 @@ public class HelloController {
     @GetMapping("/hello")
     public String sayHello() {
         // Yeh 'v1' hum baad mein change karenge
-        return "Hello from GitOps App - v1! 🚀"; 
+        return "Hello from GitOps App - v2! 🚀"; 
     }
 }
